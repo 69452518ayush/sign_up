@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_up/firebase_options.dart';
-import 'package:sign_up/login/login_screen.dart';
-import 'package:sign_up/signup.dart';
+import 'package:sign_up/home_screen.dart';
+import 'package:sign_up/login_screen.dart';
+
 
 
 void main() async {
@@ -20,12 +21,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
 
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: LoginScreen(),
+      home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context,snapshots){
+            if(snapshots.hasData){
+              return HomeScreen();
+            }
+            return  LoginScreen();
+          }),
     );
   }
 }
